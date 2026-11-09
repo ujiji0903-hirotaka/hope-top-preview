@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>HOPE横浜 トップ（A版）</title>
+<style>body{margin:0}</style>
+<style>
+/* ============================================================
+   HOPE横浜 トップ FV（A版 v5）  すべて .hp-top 内・hp- 接頭辞
+   PC ≥1024 / タブレット 768–1023 / スマホ <768 の3構図
+   ============================================================ */
+.hp-top{
+  --hp-ink:#3a1f1f;            /* 見出し・一文（墨） */
+  --hp-pt-ink:#2d3b1e;         /* 円の文字 */
+  --hp-bg:#fff;
+  --hp-ring:rgba(255,255,255,.87);
+  --hp-glow-pink:rgba(244,114,143,.47);
+  --hp-font:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  position:relative;overflow:hidden;background:var(--hp-bg);color:var(--hp-ink);
+  font-family:var(--hp-font);-webkit-font-smoothing:antialiased;
+}
+.hp-top *,.hp-top *::before,.hp-top *::after{box-sizing:border-box}
+
+/* --- 旗（ガーランド） --- */
+.hp-top__bunting{position:absolute;top:0;left:calc(50% - 1200px);width:2400px;height:48px;z-index:0;pointer-events:none}
+
+/* --- 水玉 --- */
+.hp-top__dots{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hp-top__dot{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:var(--c);opacity:.38}
+.hp-top__dot--pink{--c:#f6b6c6}.hp-top__dot--yellow{--c:#f7e3a8}.hp-top__dot--blue{--c:#bfe6f5}
+.hp-top__dot--green{--c:#cfe9b0}.hp-top__dot--lav{--c:#d9c6ee}
+.hp-top__dot--w{display:none}
+
+/* --- 本体（スマホ: 縦積み） --- */
+.hp-top__stage{
+  position:relative;z-index:1;container-type:inline-size;
+  display:flex;flex-direction:column;align-items:center;
+  padding:58px 16px 40px;
+}
+.hp-top__stage > :not(.hp-top__dots){position:relative;z-index:1}
+
+.hp-top__title{
+  margin:0;text-align:center;font-weight:700;letter-spacing:.02em;
+  font-size:clamp(24px,calc((100vw - 32px) / 12.9),40px);line-height:1.38;
+}
+.hp-top__line{display:inline-block;white-space:nowrap}
+.hp-top__lead{
+  margin:14px 0 0;text-align:center;font-weight:700;letter-spacing:.02em;
+  font-size:clamp(16px,4.6vw,22px);line-height:1.6;
+}
+.hp-top__seg{display:block;white-space:nowrap}
+
+/* 大きな円形写真（主役） */
+.hp-top__photo{
+  margin:22px 0 0;width:min(84vw,400px);aspect-ratio:1;border-radius:50%;overflow:hidden;
+  border:4px solid #fff;box-shadow:0 0 28px 8px var(--hp-glow-pink);background:#f3ece6;
+}
+.hp-top__photo img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* 4つの円（ジグザグ）。寸法は円群の幅に対する% */
+.hp-top__points{
+  --d:38.2;--dx:20.6;--dy:35.6;
+  --ks:.122; /* 小さい字（スマホ）。360pxでも15px以上 */
+  position:relative;list-style:none;margin:28px 0 0;padding:0;
+  width:min(100%,400px);container-type:inline-size;
+}
+.hp-top__points::before{content:"";display:block;padding-top:calc((var(--d) + var(--dy)) * 1%)}
+.hp-top__pt{
+  position:absolute;left:calc(var(--i) * var(--dx) * 1cqw);top:calc(var(--row) * var(--dy) * 1cqw);
+  width:calc(var(--d) * 1cqw);height:calc(var(--d) * 1cqw);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  border:2px solid var(--hp-ring);color:var(--hp-pt-ink);font-weight:700;line-height:1.3;letter-spacing:.02em;
+  font-size:calc(var(--d) * 1cqw * var(--k));
+  background:radial-gradient(circle,var(--c1) 55%,var(--c2) 100%);
+  box-shadow:0 0 24px 6px var(--g);
+}
+.hp-top__pt small{display:block;font-size:calc(var(--d) * 1cqw * var(--ks));margin-top:.3em;letter-spacing:.04em}
+.hp-top__pt--license{--i:0;--row:0;--k:.165;--c1:#f9c9bd;--c2:#fde3da;--g:rgba(246,169,154,.4)}
+.hp-top__pt--visit  {--i:1;--row:1;--k:.145;--c1:#d4e8a8;--c2:#e6f2c8;--g:rgba(183,217,122,.4)}
+.hp-top__pt--first  {--i:2;--row:0;--k:.165;--c1:#faeaa0;--c2:#fdf3c4;--g:rgba(243,217,106,.4)}
+.hp-top__pt--trial  {--i:3;--row:1;--k:.150;--c1:#b9e6f3;--c2:#d8f1f9;--g:rgba(138,216,240,.4)}
+
+/* 担当（田中さん） */
+.hp-top__staff{margin:24px 0 0;display:flex;flex-direction:column;align-items:center}
+.hp-top__staff img{
+  display:block;box-sizing:content-box;width:124px;height:auto;aspect-ratio:889/1195;
+  border:4px solid #fff;border-radius:50% 50% 11.5% 11.5% / 37.2% 37.2% 8.6% 8.6%;
+  box-shadow:0 0 28px 6px rgba(244,114,143,.3);background:#fff;
+}
+.hp-top__staff figcaption{margin-top:14px;text-align:center;font-weight:700;font-size:18px;line-height:1.5;letter-spacing:.02em}
+.hp-top__staff figcaption small{display:block;font-size:15px;font-weight:500}
+
+/* スマホの水玉 */
+.hp-top__dot:nth-child(1){--x:-56px;--y:34px;--s:150px}
+.hp-top__dot:nth-child(2){--x:calc(100% - 96px);--y:-44px;--s:140px}
+.hp-top__dot:nth-child(3){--x:calc(100% - 84px);--y:150px;--s:160px}
+.hp-top__dot:nth-child(4){--x:-74px;--y:300px;--s:160px}
+.hp-top__dot:nth-child(5){--x:calc(100% - 64px);--y:470px;--s:130px}
+.hp-top__dot:nth-child(6){--x:-62px;--y:660px;--s:170px}
+.hp-top__dot:nth-child(7){--x:calc(100% - 84px);--y:780px;--s:150px}
+.hp-top__dot:nth-child(8){--x:12%;--y:930px;--s:170px}
+
+/* ================= スマホのみの詰め（v5.2: FVの高さを約900pxへ）。768以上には効かない ================= */
+@media (max-width:767px){
+  .hp-top__stage{padding-bottom:28px}
+  .hp-top__title{line-height:1.3}
+  .hp-top__lead{margin-top:10px;line-height:1.5}
+  .hp-top__photo{margin-top:18px;width:min(78vw,400px)}
+  /* 円: 直径35%・横ピッチ21.667%・縦ずれ30.4% → 隣の円との隙間は円群幅の約2.3%（360で7.5px以上） */
+  .hp-top__points{--d:35;--dx:21.667;--dy:30.4;--ks:.132;margin-top:16px}
+  /* 田中さん: 写真（左・小）＋右にキャプションの横並び */
+  .hp-top__staff{flex-direction:row;align-items:center;gap:14px;margin-top:14px}
+  .hp-top__staff img{width:68px;border-width:3px}
+  .hp-top__staff figcaption{margin-top:0;text-align:left}
+}
+
+/* ================= タブレット 768–1023 ================= */
+@media (min-width:768px){
+  .hp-top__bunting{left:calc(50% - 1500px);width:3000px;height:60px}
+  .hp-top__stage{
+    display:grid;grid-template-columns:1fr auto auto 1fr;align-items:center;
+    grid-template-areas:"t t t t" "l l l l" ". s p ." "pt pt pt pt";column-gap:56px;
+    padding:84px 24px 56px;
+  }
+  .hp-top__title{grid-area:t;font-size:min(7vw,68px);line-height:1.3}
+  .hp-top__lead{grid-area:l;margin-top:18px;font-size:min(3.1vw,30px)}
+  .hp-top__seg{display:inline}
+  .hp-top__photo{grid-area:p;margin-top:44px;width:min(42vw,400px);box-shadow:0 0 44px 14px var(--hp-glow-pink)}
+  .hp-top__staff{grid-area:s;margin-top:44px}
+  .hp-top__staff img{width:150px}
+  .hp-top__staff figcaption{font-size:20px}
+  .hp-top__staff figcaption small{font-size:16px}
+  .hp-top__points{grid-area:pt;justify-self:center;margin-top:48px;width:min(86vw,620px);--d:32.06;--dx:22.65;--dy:24.56}
+  .hp-top__pt{box-shadow:0 0 30px 8px var(--g)}
+  /* 円の文字の比率（タブレット・PC。スマホより大きい） */
+  .hp-top__points{--ks:.118}
+  .hp-top__pt--license,.hp-top__pt--first{--k:.196}
+  .hp-top__pt--visit{--k:.138}
+  .hp-top__pt--trial{--k:.162}
+  .hp-top__dot:nth-child(1){--x:-60px;--y:30px;--s:200px}
+  .hp-top__dot:nth-child(2){--x:22%;--y:-70px;--s:180px}
+  .hp-top__dot:nth-child(3){--x:62%;--y:-40px;--s:200px}
+  .hp-top__dot:nth-child(4){--x:calc(100% - 120px);--y:120px;--s:220px}
+  .hp-top__dot:nth-child(5){--x:-50px;--y:380px;--s:200px}
+  .hp-top__dot:nth-child(6){--x:46%;--y:250px;--s:160px}
+  .hp-top__dot:nth-child(7){--x:8%;--y:760px;--s:230px}
+  .hp-top__dot:nth-child(8){--x:calc(100% - 180px);--y:700px;--s:250px}
+}
+
+/* ================= PC ≥1024（ラフ 1200×800 の座標をそのまま縮尺） ================= */
+@media (min-width:1024px){
+  .hp-top__stage{
+    display:block;width:min(100%,1200px);margin:0 auto;padding:0;aspect-ratio:3/2;
+  }
+  /* 単位 --pu: ラフの1px。子要素の側で解決させ、stage（コンテナ）の幅を基準にする */
+  .hp-top__stage > *{--pu:calc(100cqw / 1200)}
+  .hp-top__stage > :not(.hp-top__dots){position:absolute}
+  .hp-top__title{left:0;right:0;top:calc(var(--pu) * 70);font-size:calc(var(--pu) * 76);line-height:1.27}
+  .hp-top__lead{left:0;right:0;top:calc(var(--pu) * 286);margin:0;font-size:calc(var(--pu) * 34);line-height:1.4}
+  .hp-top__photo{left:calc(var(--pu) * 790);top:calc(var(--pu) * 384);width:calc(var(--pu) * 370);margin:0}
+  .hp-top__points{left:calc(var(--pu) * 210);top:calc(var(--pu) * 420);width:calc(var(--pu) * 574);margin:0}
+  .hp-top__staff{left:calc(var(--pu) * 8);top:calc(var(--pu) * 402);width:calc(var(--pu) * 220);margin:0}
+  .hp-top__staff img{width:calc(var(--pu) * 148)}
+  .hp-top__staff figcaption{margin-top:calc(var(--pu) * 16);font-size:calc(var(--pu) * 20)}
+  .hp-top__staff figcaption small{font-size:calc(var(--pu) * 16)}
+  .hp-top__dot--w{display:block}
+  .hp-top__dot:nth-child(n){--x:calc(var(--pu) * var(--px));--y:calc(var(--pu) * var(--py));--s:calc(var(--pu) * var(--ps))}
+  .hp-top__dot:nth-child(1){--px:-50;--py:30;--ps:210}
+  .hp-top__dot:nth-child(2){--px:240;--py:-70;--ps:200}
+  .hp-top__dot:nth-child(3){--px:760;--py:-30;--ps:210}
+  .hp-top__dot:nth-child(4){--px:1040;--py:90;--ps:230}
+  .hp-top__dot:nth-child(5){--px:30;--py:300;--ps:200}
+  .hp-top__dot:nth-child(6){--px:560;--py:230;--ps:170}
+  .hp-top__dot:nth-child(7){--px:380;--py:560;--ps:230}
+  .hp-top__dot:nth-child(8){--px:880;--py:560;--ps:260}
+  /* 1200px超の画面で見える外側の水玉 */
+  .hp-top__dot:nth-child(9){--px:-300;--py:110;--ps:220}
+  .hp-top__dot:nth-child(10){--px:-280;--py:500;--ps:240}
+  .hp-top__dot:nth-child(11){--px:1290;--py:340;--ps:220}
+  .hp-top__dot:nth-child(12){--px:1240;--py:610;--ps:200}
+  .hp-top__dot:nth-child(13){--px:-420;--py:330;--ps:180}
+  .hp-top__dot:nth-child(14){--px:1430;--py:60;--ps:200}
+}
+</style>
+<style>
+/* ===== FVより下（A版 S1〜S12）。すべて .hp-page 内・hp- 接頭辞 ===== */
+.hp-page,.hp-bar{--ink:#2B2622;--sub:#5C544B;--mint:#1E7B5C;--mint-h:#17654A;--mint-a:#124F3A;--mint-bg:#E6F3EC;--cream:#FEF8EF;--font:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif}
+.hp-page{
+  width:100vw;margin-left:calc(50% - 50vw);overflow-x:clip;
+  font-family:var(--font);color:var(--ink);font-size:16px;line-height:1.9;-webkit-font-smoothing:antialiased;
+}
+.hp-page *,.hp-page *::before,.hp-page *::after,.hp-bar,.hp-bar *{box-sizing:border-box}
+:where(.hp-page) :where(p,ul,ol,h2,h3,h4,figure,blockquote){margin:0;padding:0}
+:where(.hp-page) :where(ul,ol){list-style:none}
+:where(.hp-page) img{display:block;max-width:100%;height:auto}
+.hp-page a{color:inherit}
+
+.hp-sec{padding:56px 20px}
+.hp-sec--cream{background:var(--cream)}
+.hp-sec--white{background:#fff}
+.hp-sec--mint{background:var(--mint-bg)}
+.hp-in{max-width:960px;margin:0 auto}
+.hp-in--narrow{max-width:720px}
+.hp-in--center{text-align:left}
+.hp-sec p+p{margin-top:1em}
+
+/* 見出し */
+.hp-h2{font-size:clamp(22px,6.2vw,34px);line-height:1.5;font-weight:700;letter-spacing:.02em;text-align:center;margin:0 0 20px}
+.hp-h2__l{display:block}
+.hp-lead{font-size:17px;line-height:1.85;margin:0 0 28px;text-align:left}
+.hp-h2,.hp-group__t,.hp-step__t,.hp-bridge{text-wrap:balance}
+.hp-page p,.hp-page li{text-wrap:pretty}
+.hp-sub{font-size:18px;line-height:1.5;font-weight:700;margin:24px 0 8px}
+.hp-bridge{margin-top:40px;text-align:center;font-weight:700;color:var(--mint);line-height:1.7}
+
+/* FV直下 */
+.hp-sec--intro{padding-top:40px;padding-bottom:56px}
+.hp-intro{font-size:17px;line-height:1.95;margin:0 0 28px}
+
+/* ボタン＋※ */
+.hp-cta{margin-top:28px;text-align:center}
+.hp-intro+.hp-cta{margin-top:0}
+.hp-btn{display:flex;align-items:center;justify-content:center;width:100%;max-width:480px;min-height:60px;margin:0 auto;padding:12px 24px;
+  background:var(--mint);color:#fff!important;font-weight:700;font-size:18px;letter-spacing:.04em;text-decoration:none;border-radius:999px;
+  box-shadow:0 6px 0 var(--mint-a);transition:background-color .15s,transform .15s,box-shadow .15s}
+.hp-btn:hover{background:var(--mint-h)}
+.hp-btn:active{background:var(--mint-a);transform:translateY(4px);box-shadow:0 2px 0 var(--mint-a)}
+.hp-btn:focus-visible{outline:3px solid #1B1B1B;outline-offset:3px}
+.hp-notes{max-width:480px;margin:24px auto 0;text-align:left}
+.hp-notes li{font-size:14px;line-height:1.7;color:var(--sub);padding-left:1em;text-indent:-1em}
+.hp-notes li+li{margin-top:4px}
+
+/* S2 グループ */
+.hp-groups{display:grid;gap:16px;margin-bottom:28px}
+.hp-group{background:var(--cream);border-radius:20px;padding:20px 20px 12px}
+.hp-group__t{display:flex;align-items:center;gap:12px;font-size:18px;line-height:1.5;font-weight:700;margin-bottom:10px}
+.hp-group__n{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#FBD763;color:var(--ink);font-size:17px}
+.hp-group:nth-child(2) .hp-group__n{background:#F9C9BD}
+.hp-group:nth-child(3) .hp-group__n{background:#D4E8A8}
+.hp-group:nth-child(4) .hp-group__n{background:#B9E6F3}
+.hp-group:nth-child(5) .hp-group__n{background:#D9C6EE}
+.hp-list li{position:relative;padding:6px 0 6px 1.3em;line-height:1.75}
+.hp-list li::before{content:"";position:absolute;left:.1em;top:1.05em;width:.5em;height:.5em;border-radius:50%;background:var(--mint)}
+.hp-after{max-width:720px;margin:0 auto}
+
+/* 番号つき */
+.hp-steps{display:grid;gap:12px;margin:8px 0 28px}
+.hp-step{display:flex;gap:16px;align-items:flex-start;background:#fff;border-radius:20px;padding:18px 18px}
+.hp-sec--white .hp-step{background:var(--cream)}
+.hp-step__n{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--mint);color:#fff;font-weight:700;font-size:20px;line-height:1}
+.hp-step__t{font-size:18px;line-height:1.55;font-weight:700;margin:0 0 4px}
+.hp-step p{margin:0}
+
+/* S3 / 本文 */
+.hp-body{text-align:left}
+.hp-body .hp-list{margin:14px 0}
+
+/* S8 */
+.hp-prof{display:grid;gap:24px;background:#fff;border-radius:24px;padding:24px 20px}
+.hp-prof__ph{width:min(60%,240px);margin:0 auto}
+.hp-prof__ph img{width:100%;border:4px solid #fff;border-radius:50% 50% 11.5% 11.5% / 37.2% 37.2% 8.6% 8.6%;box-shadow:0 0 28px 6px rgba(244,114,143,.3);background:#fff}
+.hp-prof__name{display:flex;flex-direction:column;margin-bottom:12px}
+.hp-prof__name strong{font-size:24px;line-height:1.4}
+.hp-prof__name span{color:var(--sub);font-size:15px}
+.hp-tag{display:inline-block;margin-right:.6em;padding:0 .7em;border-radius:999px;background:var(--mint-bg);font-size:14px;font-weight:700}
+.hp-quote{margin-top:24px;background:#fff;border-radius:24px;padding:24px 22px;text-align:left}
+.hp-quote cite{display:block;margin-top:8px;font-style:normal;color:var(--sub);font-size:14px;text-align:right}
+
+/* S9 */
+.hp-box{background:var(--cream);border-radius:20px;padding:20px 22px;margin-top:8px}
+.hp-box .hp-sub{margin-top:0}
+
+/* S10 */
+.hp-cards{display:grid;gap:16px}
+.hp-card{background:#fff;border-radius:24px;padding:22px 22px 18px;border:2px solid transparent}
+.hp-card--free{border-color:var(--mint)}
+.hp-card h3{font-size:20px;line-height:1.5;font-weight:700;margin:0 0 10px}
+.hp-fee{margin:0 0 14px}
+.hp-fee h4{font-size:17px;line-height:1.6;font-weight:700;margin:0 0 2px}
+.hp-sec .hp-fee p+p{margin-top:.3em}
+
+/* S11 */
+.hp-faq{display:grid;gap:12px}
+.hp-q{background:var(--cream);border-radius:18px}
+.hp-q summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:flex-start;padding:16px 20px;min-height:56px;font-weight:700;line-height:1.7;position:relative;padding-right:52px}
+.hp-q summary::-webkit-details-marker{display:none}
+.hp-q summary::after{content:"";position:absolute;right:20px;top:50%;width:10px;height:10px;margin-top:-8px;border-right:3px solid var(--mint);border-bottom:3px solid var(--mint);transform:rotate(45deg);transition:transform .2s}
+.hp-q[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
+.hp-q summary:focus-visible{outline:3px solid #1B1B1B;outline-offset:2px;border-radius:18px}
+.hp-q__m{flex:none;color:var(--mint)}
+.hp-q__a{padding:0 20px 18px 54px}
+
+/* 固定CTAバー（1023px以下のみ） */
+.hp-bar{display:none}
+@media (max-width:1023px){
+  .hp-bar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);box-shadow:0 -4px 16px rgba(0,0,0,.08);
+    transform:translateY(110%);opacity:0;transition:transform .2s,opacity .2s;font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif}
+  .hp-bar.is-on{transform:none;opacity:1}
+  .hp-bar .hp-btn{min-height:56px;font-size:17px;box-shadow:none}
+}
+@media (prefers-reduced-motion:reduce){.hp-bar,.hp-btn,.hp-q summary::after{transition:none}}
+
+/* タブレット・PC */
+@media (min-width:768px){
+  .hp-sec{padding:80px 32px}
+  .hp-lead,.hp-intro{font-size:18px}
+  .hp-lead{text-align:center}
+  .hp-in--narrow .hp-lead{text-align:left}
+  .hp-in--center,.hp-in--center .hp-lead{text-align:center}
+  .hp-page{font-size:17px}
+  .hp-h2{margin-bottom:28px}
+  .hp-h2__l{display:inline}
+  .hp-h2__l+.hp-h2__l::before{content:"";display:block}
+  .hp-groups{grid-template-columns:1fr 1fr;gap:20px}
+  .hp-group:nth-child(5){grid-column:1 / -1}
+  .hp-prof{grid-template-columns:240px 1fr;gap:36px;padding:36px 40px;align-items:start}
+  .hp-prof__ph{width:100%}
+  .hp-cards{grid-template-columns:1fr 1fr;gap:20px}
+  .hp-card:nth-child(2){grid-row:span 2}
+}
+
+/* S8b 声 */
+.hp-voices{display:grid;gap:12px}
+.hp-vcat{background:var(--cream);border-radius:20px}
+.hp-vcat>summary{list-style:none;cursor:pointer;position:relative;display:flex;align-items:center;min-height:60px;padding:14px 56px 14px 22px;font-size:19px;font-weight:700}
+.hp-vcat>summary::-webkit-details-marker{display:none}
+.hp-vcat>summary::after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;margin-top:-8px;border-right:3px solid var(--mint);border-bottom:3px solid var(--mint);transform:rotate(45deg)}
+.hp-vcat[open]>summary::after{transform:rotate(-135deg);margin-top:-2px}
+.hp-vcat>summary:focus-visible{outline:3px solid #1B1B1B;outline-offset:2px}
+.hp-vcat__b{display:grid;gap:16px;padding:0 14px 16px}
+.hp-v{background:#fff;border-radius:18px;overflow:hidden}
+.hp-v__ph img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.hp-v__tx{padding:16px 18px 18px}
+.hp-v__h{font-size:18px;line-height:1.5;font-weight:700;margin:0 0 8px}
+.hp-v__q{font-size:15px;line-height:1.6;font-weight:700;color:var(--mint);margin:14px 0 2px}
+.hp-vnote{margin-top:20px;padding:16px 20px;background:var(--mint-bg);border-radius:16px;font-size:16px;line-height:1.8}
+@media (min-width:768px){
+  .hp-v{display:grid;grid-template-columns:340px 1fr;align-items:start}
+  .hp-vcat__b{padding:0 20px 20px}
+}
+
+/* 章の写真 */
+.hp-photo{margin:0 0 28px;border-radius:24px;overflow:hidden;box-shadow:0 0 28px 6px rgba(244,114,143,.18)}
+.hp-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}
+@media (min-width:768px){.hp-photo img{aspect-ratio:16/9}}
+.hp-in--center .hp-photo{margin-top:28px}
+.hp-top__staff figcaption{white-space:nowrap}
+
+@media (max-width:1023px){.hp-page #hp-s12{--hp-close-bar:68px}}
+
+/* =====================================================================
+   HOPE横浜 A版  部品A: 章見出しの飾り「ふたすじの ＼ ／」  v1 (2026-11-10)
+   - 対象: <h2 class="hp-h2"><span class="hp-h2__l">1行目</span><span class="hp-h2__l">2行目</span></h2>
+   - 見出しの文字はHTMLのまま。飾りだけを疑似要素＋SVG(data URI)で付ける
+   - 既存の .hp-h2::before（3色の丸）をこれで置き換える
+   - 効く範囲は .hp-page の中だけ（グローバルを汚さない）
+   - 768px以上: 1行目の左右に ＼ ／（1行目の高さに寄せる。2行目の長さに依存しない）
+   - 767px以下: 見出しの上の中央に小さな ＼ ／（見出しの横幅を食わない）
+   ===================================================================== */
+
+/* スマホ（〜767px）: 見出しの上に小さな ＼ ／ */
+.hp-page .hp-h2::before{
+  content:"";display:block;width:72px;height:38px;margin:0 auto 8px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 64' width='48' height='64'%3E%3Cpath d='M10.0 2.6 L11.1 3.9 L12.1 5.2 L13.1 6.6 L13.9 8.0 L14.7 9.4 L15.5 10.8 L16.3 12.2 L17.0 13.6 L17.8 15.0 L18.5 16.5 L19.2 17.9 L19.9 19.3 L20.6 20.7 L21.3 22.2 L22.0 23.6 L22.7 25.1 L23.4 26.5 L24.1 28.0 L24.7 29.4 L25.4 30.8 L26.1 32.3 L26.7 33.7 L27.4 35.2 L28.1 36.6 L28.8 38.1 L29.4 39.5 L30.1 41.0 L30.8 42.4 L31.4 43.9 L32.1 45.3 L32.7 46.8 L33.4 48.3 L34.0 49.7 L34.7 51.2 L35.3 52.7 L35.9 54.2 L36.5 55.7 L37.0 57.3 L37.4 58.9 L37.9 60.4 L36.1 61.6 L34.9 60.3 L33.8 59.1 L32.7 57.9 L31.7 56.6 L30.7 55.3 L29.7 54.0 L28.8 52.6 L27.9 51.2 L27.0 49.9 L26.2 48.5 L25.3 47.1 L24.5 45.7 L23.7 44.3 L22.8 42.9 L22.0 41.5 L21.3 40.1 L20.5 38.6 L19.7 37.2 L19.0 35.7 L18.3 34.3 L17.5 32.8 L16.8 31.4 L16.1 29.9 L15.5 28.4 L14.8 26.9 L14.1 25.4 L13.5 23.9 L12.9 22.4 L12.3 20.9 L11.7 19.4 L11.2 17.9 L10.7 16.3 L10.2 14.8 L9.7 13.2 L9.3 11.6 L8.9 10.0 L8.5 8.4 L8.2 6.8 L8.1 5.1 L8.0 3.4Z' fill='%23F4728F'/%3E%3Cpath d='M23.5 3.2 L24.2 4.0 L24.9 4.8 L25.5 5.6 L26.1 6.5 L26.7 7.3 L27.2 8.2 L27.7 9.1 L28.2 9.9 L28.6 10.8 L29.1 11.7 L29.6 12.5 L30.0 13.4 L30.5 14.3 L30.9 15.2 L31.3 16.1 L31.8 17.0 L32.2 17.9 L32.6 18.8 L33.0 19.7 L33.4 20.6 L33.8 21.4 L34.3 22.3 L34.7 23.2 L35.1 24.1 L35.5 25.0 L35.9 26.0 L36.3 26.9 L36.7 27.8 L37.1 28.7 L37.5 29.6 L37.9 30.5 L38.2 31.4 L38.6 32.3 L39.0 33.3 L39.3 34.2 L39.7 35.2 L40.0 36.1 L40.3 37.1 L40.5 38.1 L40.8 39.1 L39.1 40.1 L38.5 39.3 L37.7 38.6 L37.0 37.8 L36.3 37.1 L35.7 36.3 L35.0 35.4 L34.4 34.6 L33.9 33.8 L33.3 33.0 L32.7 32.1 L32.2 31.2 L31.7 30.4 L31.1 29.5 L30.6 28.6 L30.1 27.8 L29.6 26.9 L29.1 26.0 L28.6 25.1 L28.2 24.2 L27.7 23.3 L27.3 22.4 L26.8 21.5 L26.4 20.6 L26.0 19.7 L25.6 18.7 L25.2 17.8 L24.8 16.9 L24.4 15.9 L24.0 15.0 L23.7 14.0 L23.4 13.1 L23.1 12.1 L22.8 11.1 L22.5 10.1 L22.3 9.1 L22.1 8.1 L21.9 7.1 L21.8 6.1 L21.8 5.0 L21.7 3.9Z' fill='%238AD8F0'/%3E%3C/svg%3E") left top/28.5px 38px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 64' width='48' height='64'%3E%3Cg transform='matrix(-1 0 0 1 48 0)'%3E%3Cpath d='M10.0 2.6 L11.1 3.9 L12.1 5.2 L13.1 6.6 L13.9 8.0 L14.7 9.4 L15.5 10.8 L16.3 12.2 L17.0 13.6 L17.8 15.0 L18.5 16.5 L19.2 17.9 L19.9 19.3 L20.6 20.7 L21.3 22.2 L22.0 23.6 L22.7 25.1 L23.4 26.5 L24.1 28.0 L24.7 29.4 L25.4 30.8 L26.1 32.3 L26.7 33.7 L27.4 35.2 L28.1 36.6 L28.8 38.1 L29.4 39.5 L30.1 41.0 L30.8 42.4 L31.4 43.9 L32.1 45.3 L32.7 46.8 L33.4 48.3 L34.0 49.7 L34.7 51.2 L35.3 52.7 L35.9 54.2 L36.5 55.7 L37.0 57.3 L37.4 58.9 L37.9 60.4 L36.1 61.6 L34.9 60.3 L33.8 59.1 L32.7 57.9 L31.7 56.6 L30.7 55.3 L29.7 54.0 L28.8 52.6 L27.9 51.2 L27.0 49.9 L26.2 48.5 L25.3 47.1 L24.5 45.7 L23.7 44.3 L22.8 42.9 L22.0 41.5 L21.3 40.1 L20.5 38.6 L19.7 37.2 L19.0 35.7 L18.3 34.3 L17.5 32.8 L16.8 31.4 L16.1 29.9 L15.5 28.4 L14.8 26.9 L14.1 25.4 L13.5 23.9 L12.9 22.4 L12.3 20.9 L11.7 19.4 L11.2 17.9 L10.7 16.3 L10.2 14.8 L9.7 13.2 L9.3 11.6 L8.9 10.0 L8.5 8.4 L8.2 6.8 L8.1 5.1 L8.0 3.4Z' fill='%23F4728F'/%3E%3Cpath d='M23.5 3.2 L24.2 4.0 L24.9 4.8 L25.5 5.6 L26.1 6.5 L26.7 7.3 L27.2 8.2 L27.7 9.1 L28.2 9.9 L28.6 10.8 L29.1 11.7 L29.6 12.5 L30.0 13.4 L30.5 14.3 L30.9 15.2 L31.3 16.1 L31.8 17.0 L32.2 17.9 L32.6 18.8 L33.0 19.7 L33.4 20.6 L33.8 21.4 L34.3 22.3 L34.7 23.2 L35.1 24.1 L35.5 25.0 L35.9 26.0 L36.3 26.9 L36.7 27.8 L37.1 28.7 L37.5 29.6 L37.9 30.5 L38.2 31.4 L38.6 32.3 L39.0 33.3 L39.3 34.2 L39.7 35.2 L40.0 36.1 L40.3 37.1 L40.5 38.1 L40.8 39.1 L39.1 40.1 L38.5 39.3 L37.7 38.6 L37.0 37.8 L36.3 37.1 L35.7 36.3 L35.0 35.4 L34.4 34.6 L33.9 33.8 L33.3 33.0 L32.7 32.1 L32.2 31.2 L31.7 30.4 L31.1 29.5 L30.6 28.6 L30.1 27.8 L29.6 26.9 L29.1 26.0 L28.6 25.1 L28.2 24.2 L27.7 23.3 L27.3 22.4 L26.8 21.5 L26.4 20.6 L26.0 19.7 L25.6 18.7 L25.2 17.8 L24.8 16.9 L24.4 15.9 L24.0 15.0 L23.7 14.0 L23.4 13.1 L23.1 12.1 L22.8 11.1 L22.5 10.1 L22.3 9.1 L22.1 8.1 L21.9 7.1 L21.8 6.1 L21.8 5.0 L21.7 3.9Z' fill='%238AD8F0'/%3E%3C/g%3E%3C/svg%3E") right top/28.5px 38px no-repeat;
+  pointer-events:none;
+}
+
+/* タブレット・PC（768px〜）: 1行目の左右に ＼ ／ */
+@media (min-width:768px){
+  .hp-page .hp-h2::before{content:none;display:none}
+  .hp-page .hp-h2 > .hp-h2__l:first-child{display:inline-block;position:relative}
+  .hp-page .hp-h2 > .hp-h2__l:first-child::before,
+  .hp-page .hp-h2 > .hp-h2__l:first-child::after{
+    content:"";position:absolute;top:-14px;width:48px;height:64px;
+    background:no-repeat 0 0/100% 100%;pointer-events:none;
+  }
+  /* 左の ＼ : 1行目の左端から12px外 */
+  .hp-page .hp-h2 > .hp-h2__l:first-child::before{left:-60px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 64' width='48' height='64'%3E%3Cpath d='M10.0 2.6 L11.1 3.9 L12.1 5.2 L13.1 6.6 L13.9 8.0 L14.7 9.4 L15.5 10.8 L16.3 12.2 L17.0 13.6 L17.8 15.0 L18.5 16.5 L19.2 17.9 L19.9 19.3 L20.6 20.7 L21.3 22.2 L22.0 23.6 L22.7 25.1 L23.4 26.5 L24.1 28.0 L24.7 29.4 L25.4 30.8 L26.1 32.3 L26.7 33.7 L27.4 35.2 L28.1 36.6 L28.8 38.1 L29.4 39.5 L30.1 41.0 L30.8 42.4 L31.4 43.9 L32.1 45.3 L32.7 46.8 L33.4 48.3 L34.0 49.7 L34.7 51.2 L35.3 52.7 L35.9 54.2 L36.5 55.7 L37.0 57.3 L37.4 58.9 L37.9 60.4 L36.1 61.6 L34.9 60.3 L33.8 59.1 L32.7 57.9 L31.7 56.6 L30.7 55.3 L29.7 54.0 L28.8 52.6 L27.9 51.2 L27.0 49.9 L26.2 48.5 L25.3 47.1 L24.5 45.7 L23.7 44.3 L22.8 42.9 L22.0 41.5 L21.3 40.1 L20.5 38.6 L19.7 37.2 L19.0 35.7 L18.3 34.3 L17.5 32.8 L16.8 31.4 L16.1 29.9 L15.5 28.4 L14.8 26.9 L14.1 25.4 L13.5 23.9 L12.9 22.4 L12.3 20.9 L11.7 19.4 L11.2 17.9 L10.7 16.3 L10.2 14.8 L9.7 13.2 L9.3 11.6 L8.9 10.0 L8.5 8.4 L8.2 6.8 L8.1 5.1 L8.0 3.4Z' fill='%23F4728F'/%3E%3Cpath d='M23.5 3.2 L24.2 4.0 L24.9 4.8 L25.5 5.6 L26.1 6.5 L26.7 7.3 L27.2 8.2 L27.7 9.1 L28.2 9.9 L28.6 10.8 L29.1 11.7 L29.6 12.5 L30.0 13.4 L30.5 14.3 L30.9 15.2 L31.3 16.1 L31.8 17.0 L32.2 17.9 L32.6 18.8 L33.0 19.7 L33.4 20.6 L33.8 21.4 L34.3 22.3 L34.7 23.2 L35.1 24.1 L35.5 25.0 L35.9 26.0 L36.3 26.9 L36.7 27.8 L37.1 28.7 L37.5 29.6 L37.9 30.5 L38.2 31.4 L38.6 32.3 L39.0 33.3 L39.3 34.2 L39.7 35.2 L40.0 36.1 L40.3 37.1 L40.5 38.1 L40.8 39.1 L39.1 40.1 L38.5 39.3 L37.7 38.6 L37.0 37.8 L36.3 37.1 L35.7 36.3 L35.0 35.4 L34.4 34.6 L33.9 33.8 L33.3 33.0 L32.7 32.1 L32.2 31.2 L31.7 30.4 L31.1 29.5 L30.6 28.6 L30.1 27.8 L29.6 26.9 L29.1 26.0 L28.6 25.1 L28.2 24.2 L27.7 23.3 L27.3 22.4 L26.8 21.5 L26.4 20.6 L26.0 19.7 L25.6 18.7 L25.2 17.8 L24.8 16.9 L24.4 15.9 L24.0 15.0 L23.7 14.0 L23.4 13.1 L23.1 12.1 L22.8 11.1 L22.5 10.1 L22.3 9.1 L22.1 8.1 L21.9 7.1 L21.8 6.1 L21.8 5.0 L21.7 3.9Z' fill='%238AD8F0'/%3E%3C/svg%3E")}
+  /* 右の ／ : 1行目の右端から12px外（1行だけの見出し） */
+  .hp-page .hp-h2 > .hp-h2__l:first-child::after{right:-60px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 64' width='48' height='64'%3E%3Cg transform='matrix(-1 0 0 1 48 0)'%3E%3Cpath d='M10.0 2.6 L11.1 3.9 L12.1 5.2 L13.1 6.6 L13.9 8.0 L14.7 9.4 L15.5 10.8 L16.3 12.2 L17.0 13.6 L17.8 15.0 L18.5 16.5 L19.2 17.9 L19.9 19.3 L20.6 20.7 L21.3 22.2 L22.0 23.6 L22.7 25.1 L23.4 26.5 L24.1 28.0 L24.7 29.4 L25.4 30.8 L26.1 32.3 L26.7 33.7 L27.4 35.2 L28.1 36.6 L28.8 38.1 L29.4 39.5 L30.1 41.0 L30.8 42.4 L31.4 43.9 L32.1 45.3 L32.7 46.8 L33.4 48.3 L34.0 49.7 L34.7 51.2 L35.3 52.7 L35.9 54.2 L36.5 55.7 L37.0 57.3 L37.4 58.9 L37.9 60.4 L36.1 61.6 L34.9 60.3 L33.8 59.1 L32.7 57.9 L31.7 56.6 L30.7 55.3 L29.7 54.0 L28.8 52.6 L27.9 51.2 L27.0 49.9 L26.2 48.5 L25.3 47.1 L24.5 45.7 L23.7 44.3 L22.8 42.9 L22.0 41.5 L21.3 40.1 L20.5 38.6 L19.7 37.2 L19.0 35.7 L18.3 34.3 L17.5 32.8 L16.8 31.4 L16.1 29.9 L15.5 28.4 L14.8 26.9 L14.1 25.4 L13.5 23.9 L12.9 22.4 L12.3 20.9 L11.7 19.4 L11.2 17.9 L10.7 16.3 L10.2 14.8 L9.7 13.2 L9.3 11.6 L8.9 10.0 L8.5 8.4 L8.2 6.8 L8.1 5.1 L8.0 3.4Z' fill='%23F4728F'/%3E%3Cpath d='M23.5 3.2 L24.2 4.0 L24.9 4.8 L25.5 5.6 L26.1 6.5 L26.7 7.3 L27.2 8.2 L27.7 9.1 L28.2 9.9 L28.6 10.8 L29.1 11.7 L29.6 12.5 L30.0 13.4 L30.5 14.3 L30.9 15.2 L31.3 16.1 L31.8 17.0 L32.2 17.9 L32.6 18.8 L33.0 19.7 L33.4 20.6 L33.8 21.4 L34.3 22.3 L34.7 23.2 L35.1 24.1 L35.5 25.0 L35.9 26.0 L36.3 26.9 L36.7 27.8 L37.1 28.7 L37.5 29.6 L37.9 30.5 L38.2 31.4 L38.6 32.3 L39.0 33.3 L39.3 34.2 L39.7 35.2 L40.0 36.1 L40.3 37.1 L40.5 38.1 L40.8 39.1 L39.1 40.1 L38.5 39.3 L37.7 38.6 L37.0 37.8 L36.3 37.1 L35.7 36.3 L35.0 35.4 L34.4 34.6 L33.9 33.8 L33.3 33.0 L32.7 32.1 L32.2 31.2 L31.7 30.4 L31.1 29.5 L30.6 28.6 L30.1 27.8 L29.6 26.9 L29.1 26.0 L28.6 25.1 L28.2 24.2 L27.7 23.3 L27.3 22.4 L26.8 21.5 L26.4 20.6 L26.0 19.7 L25.6 18.7 L25.2 17.8 L24.8 16.9 L24.4 15.9 L24.0 15.0 L23.7 14.0 L23.4 13.1 L23.1 12.1 L22.8 11.1 L22.5 10.1 L22.3 9.1 L22.1 8.1 L21.9 7.1 L21.8 6.1 L21.8 5.0 L21.7 3.9Z' fill='%238AD8F0'/%3E%3C/g%3E%3C/svg%3E")}
+  /* 2行の見出しは1行目が「、」で終わることが多く、右に約0.5字の空きが出るので、右だけ6pxに詰める */
+  .hp-page .hp-h2 > .hp-h2__l:first-child:not(:only-child)::after{right:-54px}
+}
+
+/* =====================================================================
+   HOPE横浜 A版  部品B: S12の締め帯「FVの旗が最後にもう一度」 v1 (2026-11-10)
+   - 対象: <section class="hp-sec hp-sec--mint hp-sec--close" id="hp-s12">
+   - 追加マークアップは closing-band.html（旗のsvg＋水玉のdiv）
+   - 旗と水玉はこの帯の中だけ。文字・ボタン・※はHTMLのまま
+   - 固定CTAバー分の下余白はここでは足さない。ページ側で
+       @media (max-width:1023px){ .hp-page #hp-s12{ --hp-close-bar:68px } }
+     のように --hp-close-bar を足す（72px + 68px = 140px）
+   - 水玉は本文・ボタン・※に重ならない位置だけに置く（390/768/1024/1200/1440で実測）
+   ===================================================================== */
+
+.hp-page #hp-s12.hp-sec--close{
+  --hp-close-pt:92px;--hp-close-pb:88px;--hp-close-bar:0px;
+  position:relative;overflow:hidden;
+  padding-top:var(--hp-close-pt);
+  padding-bottom:calc(var(--hp-close-pb) + var(--hp-close-bar));
+}
+.hp-page #hp-s12.hp-sec--close > .hp-in{position:relative;z-index:2}
+
+/* 文節の途中で折り返さない（Chrome/Edgeで有効。Safari/Firefoxは通常の折り返しになる） */
+.hp-page #hp-s12.hp-sec--close p,
+.hp-page #hp-s12.hp-sec--close li{word-break:auto-phrase}
+
+/* 旗（FVと同じSVG・同じ縮尺: 3000x60 を 2400x48 で中央に） */
+.hp-page .hp-close__bunting{position:absolute;top:0;left:calc(50% - 1200px);width:2400px;height:48px;z-index:1;pointer-events:none}
+
+/* 水玉（FVと同じ5色・不透明度 .38） */
+.hp-page .hp-close__dots{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hp-page .hp-close__dot{position:absolute;display:block;border-radius:50%;opacity:.38;
+  left:var(--x);top:var(--y);width:var(--s);height:var(--s);background:var(--c)}
+
+/* スマホ（〜767px）: 4個。見出しの左右と、※の下の角だけ */
+.hp-page .hp-close__dot:nth-child(1){--c:#f6b6c6;--s:200px;--x:-140px;--y:-6px}
+.hp-page .hp-close__dot:nth-child(2){--c:#bfe6f5;--s:150px;--x:calc(100% - 54px);--y:58px}
+.hp-page .hp-close__dot:nth-child(3){display:none}
+.hp-page .hp-close__dot:nth-child(4){display:none}
+.hp-page .hp-close__dot:nth-child(5){--c:#d9c6ee;--s:170px;--x:-104px;--y:calc(100% - 86px)}
+.hp-page .hp-close__dot:nth-child(6){--c:#f7e3a8;--s:170px;--x:calc(100% - 66px);--y:calc(100% - 78px)}
+
+@media (max-width:767px){
+  .hp-page #hp-s12.hp-sec--close{--hp-close-pt:84px;--hp-close-pb:72px}
+}
+
+/* タブレット（768〜1023px）: 4個。見出しの左右と、ボタン・※の左右（ボタンと※は幅480pxなので左右が空く） */
+@media (min-width:768px) and (max-width:1023px){
+  .hp-page .hp-close__dot:nth-child(1){--c:#f6b6c6;--s:180px;--x:-70px;--y:28px}
+  .hp-page .hp-close__dot:nth-child(2){--c:#f7e3a8;--s:170px;--x:calc(100% - 100px);--y:40px}
+  .hp-page .hp-close__dot:nth-child(4){display:block;--c:#cfe9b0;--s:190px;--x:calc(100% - 110px);--y:calc(100% - 300px)}
+  .hp-page .hp-close__dot:nth-child(5){--c:#bfe6f5;--s:170px;--x:-80px;--y:calc(100% - 230px)}
+  .hp-page .hp-close__dot:nth-child(6){--c:#d9c6ee;--s:150px;--x:calc(100% - 60px);--y:calc(100% - 70px)}
+}
+
+/* PC（1024px〜）: 6個。文字の列（幅720）の外側、左右に3個ずつ */
+@media (min-width:1024px){
+  .hp-page .hp-close__dot:nth-child(1){--c:#f6b6c6;--s:220px;--x:calc(50% - 670px);--y:70px}
+  .hp-page .hp-close__dot:nth-child(2){--c:#f7e3a8;--s:200px;--x:calc(50% + 450px);--y:56px}
+  .hp-page .hp-close__dot:nth-child(3){display:block;--c:#bfe6f5;--s:180px;--x:calc(50% - 570px);--y:380px}
+  .hp-page .hp-close__dot:nth-child(4){display:block;--c:#cfe9b0;--s:230px;--x:calc(50% + 400px);--y:300px}
+  .hp-page .hp-close__dot:nth-child(5){--c:#d9c6ee;--s:170px;--x:calc(50% - 640px);--y:610px}
+  .hp-page .hp-close__dot:nth-child(6){--c:#f6b6c6;--s:160px;--x:calc(50% + 420px);--y:590px}
+}
+
+</style>
+</head>
+<body>
+<div class="hp-page">
+<section class="hp-top" aria-labelledby="hp-top-title">
+  <svg class="hp-top__bunting" viewBox="0 0 3000 60" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
+    <path d="M-300 8Q0 52 300 8M300 8Q600 52 900 8M900 8Q1200 52 1500 8M1500 8Q1800 52 2100 8M2100 8Q2400 52 2700 8M2700 8Q3000 52 3300 8" fill="none" stroke="#d8c8c0" stroke-width="1.5"/>
+    <polygon points="22.5,29.9 52.5,29.3 38.0,55.6" fill="#C9A3E6"/><polygon points="97.5,27.7 127.5,26.0 113.9,52.8" fill="#FDB868"/><polygon points="172.5,22.7 202.5,20.0 189.9,47.2" fill="#F4728F"/><polygon points="247.5,15.0 277.5,11.2 265.8,38.9" fill="#8AD8F0"/><polygon points="322.5,11.2 352.5,15.0 334.2,38.9" fill="#FBD763"/><polygon points="397.5,20.0 427.5,22.7 410.1,47.2" fill="#A5DB75"/><polygon points="472.5,26.0 502.5,27.7 486.1,52.8" fill="#C9A3E6"/><polygon points="547.5,29.3 577.5,29.9 562.0,55.6" fill="#FDB868"/><polygon points="622.5,29.9 652.5,29.3 638.0,55.6" fill="#F4728F"/><polygon points="697.5,27.7 727.5,26.0 713.9,52.8" fill="#8AD8F0"/><polygon points="772.5,22.7 802.5,20.0 789.9,47.2" fill="#FBD763"/><polygon points="847.5,15.0 877.5,11.2 865.8,38.9" fill="#A5DB75"/><polygon points="922.5,11.2 952.5,15.0 934.2,38.9" fill="#C9A3E6"/><polygon points="997.5,20.0 1027.5,22.7 1010.1,47.2" fill="#FDB868"/><polygon points="1072.5,26.0 1102.5,27.7 1086.1,52.8" fill="#F4728F"/><polygon points="1147.5,29.3 1177.5,29.9 1162.0,55.6" fill="#8AD8F0"/><polygon points="1222.5,29.9 1252.5,29.3 1238.0,55.6" fill="#FBD763"/><polygon points="1297.5,27.7 1327.5,26.0 1313.9,52.8" fill="#A5DB75"/><polygon points="1372.5,22.7 1402.5,20.0 1389.9,47.2" fill="#C9A3E6"/><polygon points="1447.5,15.0 1477.5,11.2 1465.8,38.9" fill="#FDB868"/><polygon points="1522.5,11.2 1552.5,15.0 1534.2,38.9" fill="#F4728F"/><polygon points="1597.5,20.0 1627.5,22.7 1610.1,47.2" fill="#8AD8F0"/><polygon points="1672.5,26.0 1702.5,27.7 1686.1,52.8" fill="#FBD763"/><polygon points="1747.5,29.3 1777.5,29.9 1762.0,55.6" fill="#A5DB75"/><polygon points="1822.5,29.9 1852.5,29.3 1838.0,55.6" fill="#C9A3E6"/><polygon points="1897.5,27.7 1927.5,26.0 1913.9,52.8" fill="#FDB868"/><polygon points="1972.5,22.7 2002.5,20.0 1989.9,47.2" fill="#F4728F"/><polygon points="2047.5,15.0 2077.5,11.2 2065.8,38.9" fill="#8AD8F0"/><polygon points="2122.5,11.2 2152.5,15.0 2134.2,38.9" fill="#FBD763"/><polygon points="2197.5,20.0 2227.5,22.7 2210.1,47.2" fill="#A5DB75"/><polygon points="2272.5,26.0 2302.5,27.7 2286.1,52.8" fill="#C9A3E6"/><polygon points="2347.5,29.3 2377.5,29.9 2362.0,55.6" fill="#FDB868"/><polygon points="2422.5,29.9 2452.5,29.3 2438.0,55.6" fill="#F4728F"/><polygon points="2497.5,27.7 2527.5,26.0 2513.9,52.8" fill="#8AD8F0"/><polygon points="2572.5,22.7 2602.5,20.0 2589.9,47.2" fill="#FBD763"/><polygon points="2647.5,15.0 2677.5,11.2 2665.8,38.9" fill="#A5DB75"/><polygon points="2722.5,11.2 2752.5,15.0 2734.2,38.9" fill="#C9A3E6"/><polygon points="2797.5,20.0 2827.5,22.7 2810.1,47.2" fill="#FDB868"/><polygon points="2872.5,26.0 2902.5,27.7 2886.1,52.8" fill="#F4728F"/><polygon points="2947.5,29.3 2977.5,29.9 2962.0,55.6" fill="#8AD8F0"/>
+  </svg>
+
+  <div class="hp-top__stage">
+    <div class="hp-top__dots" aria-hidden="true">
+      <i class="hp-top__dot hp-top__dot--pink"></i>
+      <i class="hp-top__dot hp-top__dot--yellow"></i>
+      <i class="hp-top__dot hp-top__dot--pink"></i>
+      <i class="hp-top__dot hp-top__dot--blue"></i>
+      <i class="hp-top__dot hp-top__dot--green"></i>
+      <i class="hp-top__dot hp-top__dot--lav"></i>
+      <i class="hp-top__dot hp-top__dot--yellow"></i>
+      <i class="hp-top__dot hp-top__dot--green"></i>
+      <i class="hp-top__dot hp-top__dot--blue hp-top__dot--w"></i>
+      <i class="hp-top__dot hp-top__dot--pink hp-top__dot--w"></i>
+      <i class="hp-top__dot hp-top__dot--yellow hp-top__dot--w"></i>
+      <i class="hp-top__dot hp-top__dot--lav hp-top__dot--w"></i>
+      <i class="hp-top__dot hp-top__dot--green hp-top__dot--w"></i>
+      <i class="hp-top__dot hp-top__dot--yellow hp-top__dot--w"></i>
+    </div>
+
+    <h1 class="hp-top__title" id="hp-top-title"><span class="hp-top__line">理解しているようなのに、</span><br><span class="hp-top__line">言葉がなかなか増えない</span></h1>
+    <p class="hp-top__lead"><span class="hp-top__seg">ご自宅で、言語聴覚士と</span><span class="hp-top__seg">ことばの育ちを一緒に考えませんか</span></p>
+
+    <div class="hp-top__photo">
+      <picture>
+        <source media="(max-width: 767px)" srcset="img/hope-session-sp.jpg">
+        <img src="img/hope-session-pc.jpg" width="850" height="850" alt="窓から光が入る部屋のテーブルで、大人と女の子が木のパズルに取り組んでいる様子">
+      </picture>
+    </div>
+
+    <ul class="hp-top__points">
+      <li class="hp-top__pt hp-top__pt--license"><span>国家<br>資格</span></li>
+      <li class="hp-top__pt hp-top__pt--visit"><span>言語聴覚士<small>が訪問</small></span></li>
+      <li class="hp-top__pt hp-top__pt--first"><span>初回 <small>相談無料</small></span></li>
+      <li class="hp-top__pt hp-top__pt--trial"><span>体験訓練<br>あり</span></li>
+    </ul>
+
+    <figure class="hp-top__staff">
+      <img src="img/tanaka.jpg" width="595" height="800" alt="田中 梨沙">
+      <figcaption>担当言語聴覚士<small>田中 梨沙</small></figcaption>
+    </figure>
+  </div>
+</section>
+<section class="hp-sec hp-sec--cream hp-sec--intro" id="hp-intro">
+<div class="hp-in hp-in--narrow">
+<p class="hp-intro">伝えたいことが言葉にならず、家で泣いたり怒ったりすることがあります。悩みの名前や診断名が分からなくても、お子さまの今の様子をそのまま伝えるところから、国家資格の言語聴覚士（ことばの専門職）との相談を始められます。気になることだけでなく、できていることも一緒に見ます。</p>
+<div class="hp-cta"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" data-cta="fv">無料で訪問相談を予約する</a><ul class="hp-notes"><li>※LINEでのご相談と、初回の訪問相談は無料（有料は体験訓練から）</li><li>※ボタンを押すとLINEが開きます。訓練の対象かどうかのご相談も、お気軽にどうぞ</li><li>※お子さまの様子は、訪問相談で詳しく伺います</li><li>※横浜市内と近隣のご自宅へ、月〜金に伺います。曜日・時間帯によってはキャンセル待ち</li></ul></div>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s2"><div class="hp-in">
+<h2 class="hp-h2"><span class="hp-h2__l">家や園で見ている様子は、</span><span class="hp-h2__l">どれに近いですか</span></h2>
+<p class="hp-lead">言葉の数のほかに、発音や会話のやり取り、言葉のつっかえが気になる場合も、同じ入口です。<br>当てはまるものが一つでも、いくつ重なっていてもかまいません。</p>
+<div class="hp-groups"><section class="hp-group"><h3 class="hp-group__t"><span class="hp-group__n">1</span>言葉が出る前、増え始めのころ</h3><ul class="hp-list"><li>こちらの言うことは分かっていそうなのに、意味のある言葉がなかなか出ない</li><li>単語は出るものの、二語文・三語文につながらない</li><li>言葉の代わりに、指差しや身振り、手を引いて連れていくことで伝えている</li><li>言える言葉と、指している物や人が、まだ結びつかないことがある</li></ul></section><section class="hp-group"><h3 class="hp-group__t"><span class="hp-group__n">2</span>言葉は出ているが、伝わりにくい</h3><ul class="hp-list"><li>家族には分かっても、ほかの人には聞き取りにくい</li><li>カ行がタ行になるなど、特定の音がうまく言えない</li><li>言いたいことが単語の並びになり、文になりにくい</li></ul></section><section class="hp-group"><h3 class="hp-group__t"><span class="hp-group__n">3</span>会話のやり取り</h3><ul class="hp-list"><li>「今日は何をしたの？」と聞くと、決まった答えが返ってくることが多い</li><li>「ちょうだい」などの要求は言えても、あったことや気持ちを話すのは難しい</li><li>名前を呼んで質問しても、返事がうまく返ってこない</li><li>伝わらないときに、泣いたり怒ったりしやすい</li></ul></section><section class="hp-group"><h3 class="hp-group__t"><span class="hp-group__n">4</span>園や学校で</h3><ul class="hp-list"><li>園や学校、健診で、話し方を指摘された</li><li>指示がいくつも重なると、聞き取りにくい</li><li>集団の中では、自分からあまり話さない</li><li>入学を前に、話し方や聞き取りが気になり始めた</li></ul></section><section class="hp-group"><h3 class="hp-group__t"><span class="hp-group__n">5</span>吃音（言葉のつっかえ）</h3><ul class="hp-list"><li>話し始めの音をくり返す、伸ばす、詰まって出てこない</li><li>つっかえが目立つ時期と、目立たない時期がある</li><li>話すときに力が入り、話しにくそうに見える</li></ul></section></div>
+<div class="hp-after"><p>言葉のつっかえ（吃音）の相談・訓練も行っています。</p><p>気になることと一緒に、「こちらの話は分かっている」「伝えようとしている」と感じる場面もあるかもしれません。それも大事な、今の様子です。</p></div>
+<p class="hp-bridge">いくつかに当てはまって、どれが一番の悩みなのか分からない。そう感じた方もいると思います。</p>
+</div></section>
+<section class="hp-sec hp-sec--cream" id="hp-s3"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">様子を、一つの名前に</span><span class="hp-h2__l">当てはめなくてかまいません</span></h2>
+<p class="hp-lead">寄せられる相談には、発音のこと、言葉の数のこと、吃音のことが一度に書かれているものがあります。どこまでが個性で、どこからが手助けの必要なことなのか分からない、という相談もあります。</p>
+<figure class="hp-photo"><img src="img/hp-photo-98.jpg" width="1200" height="800" alt="木のパズルのピースを組み合わせている、大人と子どもの手元" style="object-position:50% 50%" loading="lazy"></figure><div class="hp-body"><p>毎日の様子は、一つの名前にきれいに収まるとは限りません。だから私たちは、症状の名前で相談の入口を分けていません。名前を決めてからではなく、今の様子をそのまま伺うところから始めるのは、そのためです。</p><p>ただし、HOPE横浜は診断を行う場所ではありません。診断は医療機関で受けるものです。私たちが行うのは、言語聴覚士として、日常の様子から言葉の面を整理することです。</p><ul class="hp-list"><li>診断を受けていない、まだどこに相談すればよいか決まっていない</li><li>発音だけ、言葉のつっかえ（吃音）だけの相談</li><li>すでに診断があり、言葉の面を相談したい</li></ul><p>どのご相談も同じ入口で伺い、進め方は、お子さまの様子を伺った上でお伝えします。</p><p>名前を決めずに相談したとして、何を持ち帰れるのか。</p></div>
+<p class="hp-bridge">名前を決めずに相談したとして、何を持ち帰れるのか。</p>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s4"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">様子を伝えた後、</span><span class="hp-h2__l">相談で分かる4つのこと</span></h2>
+<p class="hp-lead">相談しても、何をすればよいか分からないまま終わるのでは。そう思うと、連絡をためらうかもしれません。相談で分かることを、先にお伝えします。</p>
+<figure class="hp-photo"><img src="img/hp-photo-135.jpg" width="1200" height="800" alt="ご自宅のテーブルで、言語聴覚士が親子と向き合っている様子" style="object-position:50% 50%" loading="lazy"></figure><ol class="hp-steps"><li class="hp-step"><span class="hp-step__n" aria-hidden="true">1</span><div><h3 class="hp-step__t">できていることと、難しいこと</h3><p>お子さまが今できていることと、まだ難しいことを分けて整理します。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">2</span><div><h3 class="hp-step__t">次に考えること</h3><p>言葉の訓練が必要かどうかも含めて、次に何を考えればよいかを明らかにします。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">3</span><div><h3 class="hp-step__t">小さな目標</h3><p>お子さまに合った、小さな目標を一緒に立てます。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">4</span><div><h3 class="hp-step__t">家での関わり方</h3><p>毎日の生活の中でできる関わり方をお伝えします。</p></div></li></ol>
+<div class="hp-body"><p>お約束できるのは、この4つまでです。相談の場で言葉が増えたり、発音がはっきりしたりすることを約束するものではありません。相談の後に訓練を受けるかどうかは、保護者の方に決めていただけます。</p><p>この4つは、ご自宅での訪問相談で整理します。</p></div>
+<div class="hp-cta"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" data-cta="s4">無料で訪問相談を予約する</a><ul class="hp-notes"><li>※LINEでのご相談と、初回の訪問相談は無料（有料は体験訓練から）</li><li>※訓練の対象かどうかのご相談も、LINEでお気軽にどうぞ。お子さまの様子は、訪問相談で詳しく伺います</li><li>※訪問は月〜金。曜日・時間帯によってはキャンセル待ちになります</li></ul></div>
+<p class="hp-bridge">では、ご自宅に伺って、何をするのか。</p>
+</div></section>
+<section class="hp-sec hp-sec--cream" id="hp-s5"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">いつもの部屋で、</span><span class="hp-h2__l">いつもに近い様子を見ます</span></h2>
+<p class="hp-lead">伺うのは、お子さまが普段過ごしているご自宅です。だから、普段に近い話し方ややり取りを見ることができます。</p>
+<figure class="hp-photo"><img src="img/hp-photo-111.jpg" width="1200" height="800" alt="窓から光が入る部屋のテーブルで、パズルに取り組む女の子" style="object-position:50% 55%" loading="lazy"></figure><div class="hp-body"><p>初回の訪問相談（お子さまがいるときは、言葉の様子を見て整理する評価を含みます）は、60〜90分です。保護者の方からお話を伺い、お子さまがいるときは、言葉の様子を見せていただきます。そのうえで、上の「相談で分かる4つのこと」を整理し、これからの進め方とご利用の方法をご説明します。お子さまには、できれば同席していただけると助かります。</p><p>用意していただくものは、過去に発達検査を受けたことがあれば、その結果だけです。</p><p>続けるかどうかは、初回とは別の日に行う体験訓練で実際の訓練を受けていただき、お子さまに合うかを見てから決められます。</p></div>
+<p class="hp-bridge">療育や通級にすでに通っている場合、それとどう違い、どう一緒に使えるのか。</p>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s6"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">療育や通級と並行して、</span><span class="hp-h2__l">家での様子から見ていきます</span></h2>
+<p class="hp-lead">ここでは、私たちがお子さまを見るときの考え方を4つお伝えします。</p>
+<figure class="hp-photo"><img src="img/hp-photo-56.jpg" width="1200" height="800" alt="ご自宅の居間で、テーブルに向かい記録を取る言語聴覚士" style="object-position:50% 40%" loading="lazy"></figure><ol class="hp-steps"><li class="hp-step"><span class="hp-step__n" aria-hidden="true">1</span><div><h3 class="hp-step__t">国家資格の言語聴覚士が担当します</h3><p>言語聴覚士は、ことばや発音、コミュニケーションを専門とする国家資格の専門職です。ご自宅には言語聴覚士が伺います。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">2</span><div><h3 class="hp-step__t">家での様子を手がかりにします</h3><p>話し方、やり取り、困っている場面など、毎日の様子から見ていきます。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">3</span><div><h3 class="hp-step__t">今の療育や通級と並べて考えます</h3><p>療育や通級、ことばの教室に通っている場合も、やめていただく必要はありません。言葉の面で何を足すとよいかを、一緒に整理します。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">4</span><div><h3 class="hp-step__t">目標と関わり方を、保護者の方とも共有します</h3><p>訓練を続ける間も、今の目標と家での関わり方を、保護者の方と共有します。</p></div></li></ol>
+<p class="hp-bridge">実際にご自宅に伺うのは、どんな人なのか。</p>
+</div></section>
+<section class="hp-sec hp-sec--cream" id="hp-s8"><div class="hp-in">
+<h2 class="hp-h2"><span class="hp-h2__l">担当する、</span><span class="hp-h2__l">言語聴覚士の紹介</span></h2>
+<p class="hp-lead">これまでの仕事と、本人からのメッセージをお伝えします。</p>
+<div class="hp-prof">
+<figure class="hp-prof__ph"><img src="img/tanaka.jpg" width="595" height="800" alt="田中 梨沙" loading="lazy"></figure>
+<div class="hp-prof__tx">
+<p class="hp-prof__name"><strong>田中 梨沙（たなか りさ）</strong><span>言語聴覚士（国家資格）</span></p>
+<p class="hp-prof__area"><span class="hp-tag">担当地域</span>横浜市全域と、近隣の地域（訪問は月〜金）</p>
+<p></p>
+<h3 class="hp-sub">これまでの仕事</h3>
+<p>小児分野を専門に、多くのお子さまとそのご家族の支援に携わってきました。自身も子育て中の、ママ言語聴覚士です。</p>
+<ul class="hp-list"><li>帝京平成大学 卒業</li><li>医療法人 明精会 会津西病院</li><li>千葉市療育センター（知的通園施設・難聴児通園施設 兼務）</li><li>船橋市役所 こども発達相談センター</li><li>児童発達支援事業所 ハッピーテラス</li><li>児童発達支援事業所 ハピコム相模大野（所長）</li><li>株式会社HOPE ことばの訪問訓練HOPE横浜（現在）</li></ul>
+</div></div>
+<blockquote class="hp-quote"><p>「また、お子さま、一人ひとりの『できた！』という成功体験を大切にし、その積み重ねが笑顔や自信に繋がるよう努めております。」</p><cite>（スタッフ紹介より）</cite></blockquote>
+<p class="hp-bridge">実際に利用した保護者の方は、どう感じたのか。</p>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s8b"><div class="hp-in">
+<h2 class="hp-h2"><span class="hp-h2__l">保護者の方の声</span></h2>
+<p class="hp-lead">保護者の方から寄せられた声を、いただいた文章のまま載せています。</p>
+<div class="hp-voices"><details class="hp-vcat" open><summary>ことばの遅れ</summary><div class="hp-vcat__b"><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-01.jpg" width="900" height="675" alt="3歳・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">3歳・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>3歳になっても話せる単語が10個ほどで、2語文が出ませんでした。健診では「様子を見ましょう」と言われましたが、このまま待っていていいのか毎日不安でした。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>家での遊び方や声のかけ方を具体的に教えてもらい、私も何をすればいいのかがわかるようになりました。息子も先生が来る日を楽しみにしていて、少しずつ言える言葉が増えてきました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>「様子を見る」間にも、できることはありました。一人で抱え込まずに、まずは相談してみてほしいです。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-02.jpg" width="900" height="675" alt="4歳・女の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">4歳・女の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>言葉の意味は理解しているのに、自分からはほとんど話しませんでした。療育に通っていましたが集団の中では話す機会が少なく、マンツーマンで見てもらえる場所を探していました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>娘が好きなおもちゃを使ってやり取りの練習をしてくれたので、楽しみながら取り組めました。「ちょうだい」「もっと」など、自分から伝えようとする場面が増えました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>自宅に来てもらえるので、慣れない場所が苦手な子でも安心です。子どもが一番リラックスできる環境で見てもらえるのはありがたいです。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-03.jpg" width="900" height="675" alt="5歳・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">5歳・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>話すことはできても、オウム返しが多く会話のキャッチボールがうまくできませんでした。幼稚園で何をしたか聞いても答えられず、来年の小学校入学を前に焦っていました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>質問への答え方を、絵カードなどを使って段階的に練習してもらいました。「今日は何をしたの?」に短い言葉で答えられる日が出てきて、親子の会話が楽しくなりました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>家庭での関わり方を一緒に考えてもらえるのが心強かったです。就学前の不安がある方は、早めに相談すると気持ちが楽になると思います。</p></div></article></div></details><details class="hp-vcat"><summary>発音のお悩み</summary><div class="hp-vcat__b"><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-04.jpg" width="900" height="675" alt="5歳・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">5歳・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>サ行が「しゃ・しゅ・しょ」のようになり、「さかな」が「しゃかな」になっていました。耳鼻科では聞こえに問題なしと言われ、どこに相談すればいいのかわかりませんでした。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>ゲームを中心に練習していて、遊びの中で自然に音を出したりと、娘が飽きない工夫をしてくれました。「さ」がきれいに言えたときの嬉しそうな顔が忘れられません。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>幼いうちは「そのうち治る」と言われることも多いですが、気になったら一度専門の方に見てもらうと安心できます。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-05.jpg" width="900" height="675" alt="6歳・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">6歳・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>カ行がタ行になってしまい、「みかん」が「みたん」みたいになっていました。お友達に聞き返されることが増えて、来年の小学校入学が心配でした。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>舌の動かし方を遊びながら練習でき、家でもできる練習を教わりました。毎日少しずつ続けるうちに、言える音が増えてきました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>「そのうち治るかも」と迷っている時間がもったいなかったなと思います。気になったら一度見てもらうのがおすすめです。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-06.jpg" width="900" height="675" alt="小学1年生・女の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学1年生・女の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>「つ」が「ちゅ」になるなど、一部の音がうまく言えませんでした。通級も勧められましたが、本人がクラスを抜けるのを嫌がり、放課後に通えるところを探していました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>学校が終わってから自宅で訓練できたので、娘も周りを気にせずに取り組めました。音読の宿題も自信を持って読めるようになり、本人も嬉しそうです。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>子どもの気持ちを大切にしながら訓練できる方法もあります。小学生になってからでも遅くないので、相談してみてください。</p></div></article></div></details><details class="hp-vcat"><summary>学習の遅れ</summary><div class="hp-vcat__b"><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-07.jpg" width="900" height="675" alt="小学2年生・女の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学2年生・女の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>ひらがなの読み書きがなかなか覚えられず、音読も一文字ずつの拾い読みでした。宿題のたびに泣いてしまい、親子で疲れ切っていました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>音と文字を結びつける練習を、カードやゲームを使ってしてもらいました。「できた!」という経験が増えて、宿題に向かうときの表情が明るくなりました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>家で教えようとするとどうしても力が入ってしまいます。専門の先生に間に入ってもらうと、親も子どもも気持ちが楽になります。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-08.jpg" width="900" height="675" alt="小学3年生・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学3年生・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>文章を読むときに行を飛ばしたり、似た文字を読み間違えたりすることが多く、国語の長い文章になると内容が頭に入っていませんでした。「登場人物の気持ち」を聞かれても答えられず、テストのたびに落ち込んでいました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>読むことそのものに力を使いすぎて、内容を考える余裕がなかったことがわかりました。指でなぞりながら読む、区切りごとに線を引くなどの工夫を教わり、短い文章なら「こういうお話だよ」と説明できるようになってきました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>「読解力がない」と思っていましたが、原因は文字を読む段階にありました。つまずきの理由がわかるだけで、関わり方が大きく変わります。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-09.jpg" width="900" height="675" alt="小学5年生・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学5年生・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>計算問題はできるのに、算数の文章題になると手が止まってしまいました。「何を聞かれているのかわからない」と言って、足し算か引き算かも当てずっぽうで選んでいたようです。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>問題文を短く区切って読む練習や、内容を絵や図にして整理する練習をしてもらいました。「あわせて」「のこりは」などの言葉に気づけるようになり、自分の力で式を立てられる問題が増えてきました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>算数が苦手なのではなく、言葉の理解でつまずいていることもあります。高学年でも遅くないので、一度相談してみてください。</p></div></article></div></details><details class="hp-vcat"><summary>吃音</summary><div class="hp-vcat__b"><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-10.jpg" width="900" height="675" alt="6歳・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">6歳・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>話し始めに「ぼ、ぼ、ぼくね」と繰り返すことが急に増えました。どう接したらいいのかわからず、つい「ゆっくり話して」と言ってしまっていました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>吃音についてわかりやすく説明してもらい、家庭での話の聞き方を教わりました。親が落ち着いて接するようになってから、息子も楽しそうに話してくれるようになりました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>ネットで調べるほど不安になりました。専門の方に直接話を聞いてもらうのが、一番の安心材料でした。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-11.jpg" width="900" height="675" alt="小学2年生・女の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学2年生・女の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>年中の頃から言葉の最初がつっかえるようになり、就学前になって目立ってきました。本人も「うまく言えない」と気にしていて、見ていてつらかったです。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>自宅で、娘のペースでリラックスして練習できたのがよかったです。親の接し方も教わり、家での会話がゆったりした雰囲気になりました。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>親が焦ると子どもにも伝わります。相談できる人がいるだけで、気持ちがずいぶん楽になりました。</p></div></article><article class="hp-v"><figure class="hp-v__ph"><img src="img/hp-voice-12.jpg" width="900" height="675" alt="小学4年生・男の子のご家庭" loading="lazy"></figure><div class="hp-v__tx"><h3 class="hp-v__h">小学4年生・男の子のご家庭</h3><h4 class="hp-v__q">Q. どんなお悩みでしたか?</h4><p>言葉が詰まって出てこない「難発」が中心で、発表や音読の前には緊張してお腹が痛くなることもありました。通級教室では個別の練習が受けられず、外部で指導してもらえるところを探していました。</p><h4 class="hp-v__q">Q. HOPEを受けてどうなりましたか?</h4><p>力まずに声を出す練習や、詰まったときの対処法を一緒に考えてもらいました。息子自身が吃音について先生と話せるようになり、「詰まっても大丈夫」と思えるようになったようです。</p><h4 class="hp-v__q">Q. 悩んでいる方へアドバイスをお願いします。</h4><p>本人の気持ちに寄り添ってくれる先生に出会えたことが大きかったです。小学生になってからでも、あきらめずに相談してみてください。
+
+<strong>注記（12件の声の下に1つ）</strong>
+個人の感想です。お子さまの状況はそれぞれ違い、同じ変化をお約束するものではありません。
+
+ボタンを押した後は、どう進むのか。
+
+（このファイルの「### ことばの遅れ」などの見出し記号、「<strong>」の太字記号、「</strong>写真**: voice_N（alt「…」）」の行は、制作用の印。公開面では、カテゴリ見出し・年齢と性別の見出し・Qの見出しを文字として、写真を画像として置く）</p></div></article></div></details></div>
+<p class="hp-vnote">個人の感想です。お子さまの状況はそれぞれ違い、同じ変化をお約束するものではありません。</p>
+<p class="hp-bridge">（このファイルの「### ことばの遅れ」などの見出し記号、「<strong>」の太字記号、「</strong>写真**: voice_N（alt「…」）」の行は、制作用の印。公開面では、カテゴリ見出し・年齢と性別の見出し・Qの見出しを文字として、写真を画像として置く）</p>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s9"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">LINEで予約してから、</span><span class="hp-h2__l">続けるかを決めるまで</span></h2>
+<p class="hp-lead">ボタンを押すと、LINEが開きます。そこから先は、次の5つの段階で進みます。</p>
+<ol class="hp-steps"><li class="hp-step"><span class="hp-step__n" aria-hidden="true">1</span><div><h3 class="hp-step__t">LINEで訪問相談を予約する</h3><p>友だち追加の後、LINEで訪問相談の予約を承ります。予約の前に、LINEでご相談いただくこともできます。お子さまを見てもらえる場所なのか、どう進むのかといった気がかりを、お気軽にお送りください。訓練の対象かどうか分からなくても大丈夫です。対象かどうかは、私たちがご相談に乗りながら、一緒に確かめます。お子さまの様子の評価や見立て、訓練の内容のご提案は、このあとの初回の訪問相談で行います。ご利用の方法・料金・空き状況も、LINEでご案内します。LINEでのご相談は無料です。LINEのご返信は、月〜金の9時〜17時です。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">2</span><div><h3 class="hp-step__t">地域と日時を決める</h3><p>訪問先の市区町村と、ご希望の曜日・時間帯を伺います。訪問は月〜金です。空きは日によって変わるため、日時は、ご予約の際にLINEでご相談しながら決めます。曜日・時間帯によってはキャンセル待ちになります。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">3</span><div><h3 class="hp-step__t">初回の訪問相談（無料）</h3><p>言語聴覚士がご自宅に伺い（60〜90分）、「相談で分かる4つのこと」を整理します。進め方とご利用の方法も、このときにご説明します。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">4</span><div><h3 class="hp-step__t">体験訓練（別日。60分1回。5,000円・税込）</h3><p>初回の訪問相談とは別の日に、実際の訓練を1回受けていただき、お子さまに合うかを見ます。体験訓練まで、交通費も駐車場代もかかりません。続ける場合の交通費と駐車場代のかかり方は、次の「料金・地域・空き状況」にまとめています。</p></div></li><li class="hp-step"><span class="hp-step__n" aria-hidden="true">5</span><div><h3 class="hp-step__t">続けるかどうかを決める</h3><p>続けるかどうかは、体験の後に保護者の方に決めていただけます。続ける場合の訪問は、基本は毎週です。頻度は、お子さまの様子とご家族のご希望を踏まえて決めます。続ける場合の料金も、同じ「料金・地域・空き状況」にまとめています。</p></div></li></ol>
+<div class="hp-box"><h3 class="hp-sub">LINEで最初に伺うこと</h3><ul class="hp-list"><li>お子さまの年齢</li><li>訪問先の市区町村</li><li>ご希望の曜日・時間帯</li><li>ご相談したいこと・まず知りたいこと（ご利用の方法、料金、空きなど）</li></ul><p>分かる項目だけで、まずは送ってみてください。</p></div>
+<div class="hp-cta"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" data-cta="s9">無料で訪問相談を予約する</a><ul class="hp-notes"><li>※LINEでのご相談と、初回の訪問相談は無料（有料は体験訓練から）</li><li>※訓練の対象かどうかのご相談も、LINEでお気軽にどうぞ</li><li>※曜日・時間帯によってはキャンセル待ち。空きはLINEでご案内します</li></ul></div>
+</div></section>
+<section class="hp-sec hp-sec--cream" id="hp-s10"><div class="hp-in">
+<h2 class="hp-h2"><span class="hp-h2__l">料金・地域・空き状況を、</span><span class="hp-h2__l">先にお伝えします</span></h2>
+<p class="hp-lead">無料になる範囲と、有料になる範囲を、先に分けておきます。</p>
+<div class="hp-cards">
+<article class="hp-card hp-card--free"><h3>無料</h3><p>LINEでのご相談と、初回の訪問相談は無料です。初回の訪問相談は、交通費も駐車場代もかかりません。有料になるのは、初回とは別の日に行う体験訓練（5,000円・税込）からです。</p></article>
+<article class="hp-card"><h3>有料（体験訓練から）</h3><div class="hp-fee"><h4>体験訓練</h4><p>5,000円（税込）。60分、1回です。交通費も駐車場代もかかりません。</p><p>お子さまに合うかを見るための訓練です。初回の訪問相談（無料）とは別の日に行います。</p></div><div class="hp-fee"><h4>継続訓練</h4><p>訪問60分 1回 13,200円（税込）</p><p>回数プランもあります。回数プランに有効期限はありません。</p></div><div class="hp-fee"><h4>継続訓練の交通費・駐車場代</h4><p>ご契約の後は、訪問ごとに、地域によって交通費が別途かかる場合があります。ご自宅に駐車スペースがない場合は、駐車場代も別にかかります。金額は、交通費はお住まいの地域に合わせて、駐車場代はご自宅の駐車スペースの状況に合わせて、LINEでご案内します。</p></div><p>お支払いは、お振込みかクレジットカードです。分割払いにも対応しています（手数料は、ご利用のクレジットカードによります）。</p></article>
+<article class="hp-card"><h3>地域・対象</h3><ul class="hp-list"><li>横浜市全域と、近隣の地域に伺います。</li><li>近隣の地域の範囲と、継続訓練の交通費は、ご住所を伺った上でご案内します。</li><li>対象年齢: お子さまの年齢に制限はありません。</li></ul></article>
+<article class="hp-card"><h3>空き状況</h3><ul class="hp-list"><li>訪問は月〜金です。</li><li>空きは日によって変わるため、日時は、ご予約の際にLINEでご相談しながら決めます。</li><li>曜日・時間帯によってはキャンセル待ちになります。</li><li>空き状況は、LINEでご案内します。</li></ul></article>
+</div>
+<div class="hp-cta"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" data-cta="s10">無料で訪問相談を予約する</a><ul class="hp-notes"><li>※LINEでのご相談と、初回の訪問相談は無料（有料は体験訓練から）</li><li>※訓練の対象かどうかのご相談も、LINEでお気軽にどうぞ</li></ul></div>
+</div></section>
+<section class="hp-sec hp-sec--white" id="hp-s11"><div class="hp-in hp-in--narrow">
+<h2 class="hp-h2"><span class="hp-h2__l">よくいただく質問</span></h2>
+<div class="hp-faq"><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>診断がなくても相談できますか？</span></summary><div class="hp-q__a"><p>できます。診断書も必要ありません。HOPE横浜は診断を行う場所ではないため、診断名を付けることもしていません。考え方は「様子を、一つの名前に当てはめなくてかまいません」の章にまとめています。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>市や病院、園で「様子を見ましょう」と言われています。相談してもいいですか？</span></summary><div class="hp-q__a"><p>はい。様子を見るという判断は、お子さまを見た上で出されたものです。私たちはその判断を否定しません。様子を見ている間、家でどう関わればよいかも含めて、今の様子から整理できます。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>まだ言葉が出ていません。じっと座っているのも難しいのですが、相談できますか？</span></summary><div class="hp-q__a"><p>相談はできます。どのように進められるかは、初回の訪問相談で、お子さまの普段の様子を伺った上でご案内します。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>療育や通級に通っています。一緒に利用できますか？</span></summary><div class="hp-q__a"><p>はい。今の療育や通級はそのままに、言葉の面で何を足すとよいかを一緒に整理します。考え方は「療育や通級と並行して、家での様子から見ていきます」の章をご覧ください。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>吃音や発音だけの相談でもいいですか？</span></summary><div class="hp-q__a"><p>はい。吃音（話し始めの音をくり返したり、詰まったりする話し方）の相談・訓練を行っています。特定の音が言いにくいといったご相談も、同じ入口で伺います。進め方は、お子さまの様子を伺った上でお伝えします。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>どのくらいの回数や期間で、変化が見られますか？</span></summary><div class="hp-q__a"><p>回数や期間、変化が見られる時期をお約束することはできません。お子さまによって様子が違うためです。初回の訪問相談で、お子さまに合った目標と、まず何から始めるかをお伝えします。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>どの地域に来てもらえますか？ 曜日や時間帯は選べますか？</span></summary><div class="hp-q__a"><p>横浜市全域と、近隣の地域に伺います。訪問は月〜金です。ご希望の曜日・時間帯を伺い、日時は、ご予約の際にLINEでご相談しながら決めます。近隣の地域の範囲は、ご住所を伺った上でご案内します。空き状況は、「料金・地域・空き状況」をご覧ください。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>料金と支払い方法を教えてください。</span></summary><div class="hp-q__a"><p>LINEでのご相談と、初回の訪問相談は無料です。有料は、初回とは別の日に行う体験訓練（60分1回）からで、5,000円（税込）です。体験訓練まで、交通費も駐車場代もかかりません。続ける場合の継続訓練は、訪問60分1回13,200円（税込）で、回数プランもあります。お支払いは、お振込みかクレジットカードで、分割払いにも対応しています。継続訓練の交通費・駐車場代のかかり方は、「料金・地域・空き状況」にまとめています。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>空き状況はどうですか？</span></summary><div class="hp-q__a"><p>「料金・地域・空き状況」の「空き状況」にまとめています。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>うちの子が訓練の対象になるのか分かりません。相談してもいいですか？</span></summary><div class="hp-q__a"><p>はい。訓練の対象かどうか分からなくても、まずはLINEでお気軽にご相談ください。対象かどうかは、私たちがご相談に乗りながら、一緒に確かめます。お子さまの様子の評価や見立て、訓練の内容のご提案は、初回の訪問相談で行います。日本語以外の言語での対応は、ご予約の際にお尋ねください。</p></div></details><details class="hp-q"><summary><span class="hp-q__m">Q.</span><span>予約の変更やキャンセルはできますか？</span></summary><div class="hp-q__a"><p>できます。直前のキャンセルでも、キャンセル料はかかりません。変更やキャンセルが分かった時点で、LINEでご連絡ください。担当の言語聴覚士の都合でお休みする日は、別の担当者は伺わず、振替の日をご相談します。</p></div></details></div>
+</div></section>
+<section class="hp-sec hp-sec--mint hp-sec--close" id="hp-s12"><svg class="hp-close__bunting" viewBox="0 0 3000 60" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
+    <path d="M-300 8Q0 52 300 8M300 8Q600 52 900 8M900 8Q1200 52 1500 8M1500 8Q1800 52 2100 8M2100 8Q2400 52 2700 8M2700 8Q3000 52 3300 8" fill="none" stroke="#d8c8c0" stroke-width="1.5"/>
+    <polygon points="22.5,29.9 52.5,29.3 38.0,55.6" fill="#C9A3E6"/><polygon points="97.5,27.7 127.5,26.0 113.9,52.8" fill="#FDB868"/><polygon points="172.5,22.7 202.5,20.0 189.9,47.2" fill="#F4728F"/><polygon points="247.5,15.0 277.5,11.2 265.8,38.9" fill="#8AD8F0"/><polygon points="322.5,11.2 352.5,15.0 334.2,38.9" fill="#FBD763"/><polygon points="397.5,20.0 427.5,22.7 410.1,47.2" fill="#A5DB75"/><polygon points="472.5,26.0 502.5,27.7 486.1,52.8" fill="#C9A3E6"/><polygon points="547.5,29.3 577.5,29.9 562.0,55.6" fill="#FDB868"/><polygon points="622.5,29.9 652.5,29.3 638.0,55.6" fill="#F4728F"/><polygon points="697.5,27.7 727.5,26.0 713.9,52.8" fill="#8AD8F0"/><polygon points="772.5,22.7 802.5,20.0 789.9,47.2" fill="#FBD763"/><polygon points="847.5,15.0 877.5,11.2 865.8,38.9" fill="#A5DB75"/><polygon points="922.5,11.2 952.5,15.0 934.2,38.9" fill="#C9A3E6"/><polygon points="997.5,20.0 1027.5,22.7 1010.1,47.2" fill="#FDB868"/><polygon points="1072.5,26.0 1102.5,27.7 1086.1,52.8" fill="#F4728F"/><polygon points="1147.5,29.3 1177.5,29.9 1162.0,55.6" fill="#8AD8F0"/><polygon points="1222.5,29.9 1252.5,29.3 1238.0,55.6" fill="#FBD763"/><polygon points="1297.5,27.7 1327.5,26.0 1313.9,52.8" fill="#A5DB75"/><polygon points="1372.5,22.7 1402.5,20.0 1389.9,47.2" fill="#C9A3E6"/><polygon points="1447.5,15.0 1477.5,11.2 1465.8,38.9" fill="#FDB868"/><polygon points="1522.5,11.2 1552.5,15.0 1534.2,38.9" fill="#F4728F"/><polygon points="1597.5,20.0 1627.5,22.7 1610.1,47.2" fill="#8AD8F0"/><polygon points="1672.5,26.0 1702.5,27.7 1686.1,52.8" fill="#FBD763"/><polygon points="1747.5,29.3 1777.5,29.9 1762.0,55.6" fill="#A5DB75"/><polygon points="1822.5,29.9 1852.5,29.3 1838.0,55.6" fill="#C9A3E6"/><polygon points="1897.5,27.7 1927.5,26.0 1913.9,52.8" fill="#FDB868"/><polygon points="1972.5,22.7 2002.5,20.0 1989.9,47.2" fill="#F4728F"/><polygon points="2047.5,15.0 2077.5,11.2 2065.8,38.9" fill="#8AD8F0"/><polygon points="2122.5,11.2 2152.5,15.0 2134.2,38.9" fill="#FBD763"/><polygon points="2197.5,20.0 2227.5,22.7 2210.1,47.2" fill="#A5DB75"/><polygon points="2272.5,26.0 2302.5,27.7 2286.1,52.8" fill="#C9A3E6"/><polygon points="2347.5,29.3 2377.5,29.9 2362.0,55.6" fill="#FDB868"/><polygon points="2422.5,29.9 2452.5,29.3 2438.0,55.6" fill="#F4728F"/><polygon points="2497.5,27.7 2527.5,26.0 2513.9,52.8" fill="#8AD8F0"/><polygon points="2572.5,22.7 2602.5,20.0 2589.9,47.2" fill="#FBD763"/><polygon points="2647.5,15.0 2677.5,11.2 2665.8,38.9" fill="#A5DB75"/><polygon points="2722.5,11.2 2752.5,15.0 2734.2,38.9" fill="#C9A3E6"/><polygon points="2797.5,20.0 2827.5,22.7 2810.1,47.2" fill="#FDB868"/><polygon points="2872.5,26.0 2902.5,27.7 2886.1,52.8" fill="#F4728F"/><polygon points="2947.5,29.3 2977.5,29.9 2962.0,55.6" fill="#8AD8F0"/>
+  </svg>
+<div class="hp-close__dots" aria-hidden="true"><i class="hp-close__dot"></i><i class="hp-close__dot"></i><i class="hp-close__dot"></i><i class="hp-close__dot"></i><i class="hp-close__dot"></i><i class="hp-close__dot"></i></div><div class="hp-in hp-in--narrow hp-in--center">
+<h2 class="hp-h2"><span class="hp-h2__l">見ている様子を、</span><span class="hp-h2__l">そのまま伝えてください</span></h2>
+<p class="hp-lead">悩みの名前や診断名が分からなくても、お子さまの今の様子をそのまま伝えるところから、国家資格の言語聴覚士との相談を始められます。</p>
+<p>家や園で見ていることは、初回の訪問相談で、短い言葉のままで話してください。ボタンからLINEが開き、訪問相談を予約できます。</p>
+<div class="hp-cta"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" data-cta="s12">無料で訪問相談を予約する</a><ul class="hp-notes"><li>※LINEでのご相談と、初回の訪問相談は無料（有料は体験訓練から）</li><li>※訓練の対象かどうかのご相談も、LINEでお気軽にどうぞ。お子さまの様子は、訪問相談で詳しく伺います</li><li>※訪問は月〜金。曜日・時間帯によってはキャンセル待ちになります</li></ul></div>
+</div></section>
+</div>
+<div class="hp-bar" id="hp-bar" aria-hidden="true"><a class="hp-btn" href="https://lin.ee/ZvyfRRG" tabindex="-1" data-cta="bar">無料で訪問相談を予約する</a></div>
+<script>
+(function(){
+  var bar=document.getElementById('hp-bar');
+  if(!bar||!('IntersectionObserver' in window))return;
+  // FV直下のボタンとS12のボタンが見えている間は、固定バーを隠す
+  var targets=[].slice.call(document.querySelectorAll('[data-cta="fv"],[data-cta="s12"]'));
+  var vis={};
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){vis[e.target.getAttribute('data-cta')]=e.isIntersecting});
+    var hide=Object.keys(vis).some(function(k){return vis[k]});
+    bar.classList.toggle('is-on',!hide);
+    bar.setAttribute('aria-hidden',hide?'true':'false');
+    bar.querySelector('a').tabIndex=hide?-1:0;
+  },{threshold:0});
+  targets.forEach(function(t){io.observe(t)});
+})();
+
+</script>
+</body>
+</html>
